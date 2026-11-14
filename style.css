@@ -314,26 +314,31 @@ button:active { transform: scale(0.98); }
 .product {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: 480px;              /* ارتفاع ثابت لكل البطاقات */
+    overflow: hidden;
 }
+.product-card img,
+.product img { flex-shrink: 0; }
 .product-card .product-info {
     flex: 1;
     display: grid;
     grid-template-columns: 1fr 1fr;      /* المزيد + شراء جنب بعض */
     grid-auto-rows: min-content;
-    align-content: start;
+    align-content: space-between;   /* الأزرار دائماً في أسفل البطاقة */
+    min-height: 0;
+    overflow: hidden;
     gap: 8px;
 }
-.product-card .product-info > *:not(.btn):not(button) { grid-column: 1 / -1; }
+.product-card .product-info > *:not(.btn):not(button):not(a) { grid-column: 1 / -1; }
 .product-card .product-info h3 {
-    min-height: 2.6em;                    /* سطران دائماً لتتساوى البطاقات */
+    height: 2.6em;                        /* سطران ثابتان لتتساوى البطاقات */
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
 .product-card .product-info p {
-    min-height: 1.5em;
+    height: 3.4em;                        /* سطران ثابتان */
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -341,6 +346,7 @@ button:active { transform: scale(0.98); }
 }
 
 /* أزرار (المزيد) و(شراء): نفس الشكل تماماً */
+.product-card .product-info a,
 .product-card .product-info .btn,
 .product-card .product-info button,
 .product .btn,
@@ -362,6 +368,7 @@ button:active { transform: scale(0.98); }
     cursor: pointer;
     transition: background var(--transition);
 }
+.product-card .product-info a:hover,
 .product-card .product-info .btn:hover,
 .product-card .product-info button:hover,
 .product .btn:hover,
@@ -706,6 +713,8 @@ footer,
     .productsList { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
     .product-card img,
     .product img { height: 175px; padding: 12px; }
+    .product-card,
+    .product { height: 430px; }
     .product-card .product-info { padding: 13px; }
     .product-card .product-info h3 { font-size: 1rem; }
     .product-card .product-info .price { font-size: 1.1rem; }
@@ -743,7 +752,11 @@ footer,
     .product { border-radius: 12px; }
     .product-card img,
     .product img { height: 140px; padding: 8px; }
+    .product-card,
+    .product { height: 365px; }
+    .product-card .product-info p { height: 1.7em; -webkit-line-clamp: 1; }
     .product-card .product-info { padding: 10px; }
+    .product-card .product-info a,
     .product-card .product-info .btn,
     .product-card .product-info button { height: 36px; line-height: 36px; font-size: 0.82rem; margin: 4px 0 0; padding: 0 4px; border-radius: 8px; }
     .product-card .product-info h3 { font-size: 0.92rem; }
