@@ -87,7 +87,7 @@ button{
     display: flex;
     justify-content: center;
     align-items: center;
-    background: url('img/a16.png') no-repeat center center ; /* خلفية ثابتة */
+    background: url('img/a16.png') ; /* خلفية ثابتة */
     background-size: cover; /* لتغطية الخلفية بالكامل */
     color: dimgray;
 
