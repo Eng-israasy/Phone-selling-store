@@ -120,13 +120,7 @@ button:active { transform: scale(0.98); }
     justify-content: center;
     align-items: center;
     color: #fff;
-    background-color: var(--navy);
-    background-image:
-        linear-gradient(135deg, rgba(15, 42, 61, 0.80) 0%, rgba(15, 42, 61, 0.45) 60%, rgba(26, 166, 201, 0.25) 100%),
-        url('./a16.png');
-    background-size: cover;               /* تغطي كامل المساحة بدون تمدد */
-    background-position: center center;
-    background-repeat: no-repeat;
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-soft) 55%, #1b6f8a 100%);
 }
 
 .content .home {
@@ -293,6 +287,12 @@ button:active { transform: scale(0.98); }
     transition: background var(--transition);
 }
 .product-card .product-info .btn:hover { background: var(--accent); }
+
+/* إخفاء أزرار (المزيد) و(شراء) من بطاقات المنتجات */
+.product-card .btn,
+.product-card button,
+.product .btn,
+.product button { display: none !important; }
 
 /* ---------- النماذج (تسجيل / إضافة منتج) ---------- */
 .form-container {
@@ -549,25 +549,25 @@ footer,
 /* تابلت / موبايل */
 @media (max-width: 768px) {
 
-    :root { --nav-h: 64px; }
+    :root { --nav-h: 56px; }
 
     /* قائمة الموبايل: زر + قائمة منسدلة فوق المحتوى */
     .nav-bar {
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
-        padding: 8px 14px;
+        padding: 7px 12px;
     }
     .nav-bar .toggle {
         display: flex;
         align-items: center;
         justify-content: center;
         width: 100%;
-        height: 46px;
-        padding: 0 16px;
+        height: 40px;
+        padding: 0 14px;
         background: rgba(255, 255, 255, 0.08);
         color: #fff;
-        font-size: 1.05rem;
+        font-size: 0.95rem;
         font-weight: 600;
         border: 1px solid rgba(255, 255, 255, 0.22);
         border-radius: 10px;
@@ -586,7 +586,7 @@ footer,
         flex-direction: column;
         align-items: stretch;
         gap: 0;
-        padding: 6px 14px 14px;
+        padding: 4px 12px 10px;
         background: var(--navy);
         border-top: 1px solid rgba(255, 255, 255, 0.10);
         box-shadow: 0 16px 28px rgba(0, 0, 0, 0.35);
@@ -597,9 +597,9 @@ footer,
     .nav-bar a {
         display: block;
         width: 100%;
-        padding: 14px 12px;
+        padding: 11px 10px;
         text-align: start;
-        font-size: 1.05rem;
+        font-size: 0.95rem;
         border-radius: 0;
         border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
@@ -609,12 +609,11 @@ footer,
     /* الشاشة الرئيسية */
     .content {
         padding: 0 16px;
-        background-position: 62% center;
     }
     .form,
-    .content .form { height: 60px; padding: 6px 6px 6px 20px; }
+    .content .form { max-width: 440px; height: 50px; padding: 4px 4px 4px 16px; box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28); }
     .btn-primary,
-    .content .form button { padding: 0 28px; }
+    .content .form button { padding: 0 22px; font-size: 0.95rem; }
 
     /* المنتجات */
     .productsSection { padding: 48px 4%; }
@@ -647,13 +646,11 @@ footer,
 
     /* مربع البحث يبقى بشكل كبسولة مضغوطة */
     .form,
-    .content .form { height: 54px; padding: 5px 5px 5px 16px; gap: 4px; }
+    .content .form { height: 44px; padding: 3px 3px 3px 14px; gap: 4px; }
     .text,
-    .search-input { font-size: 16px; text-align: start; }
+    .search-input { font-size: 16px; text-align: start; }   /* 16px تمنع تكبير الصفحة تلقائياً في iPhone */
     .btn-primary,
-    .content .form button { padding: 0 20px; font-size: 0.95rem; }
-    .btn-primary,
-    .content .form button { width: 100%; border-radius: 12px; }
+    .content .form button { padding: 0 16px; font-size: 0.88rem; }
 
     .productsSection { padding: 38px 12px; }
     .product-list,
@@ -666,7 +663,6 @@ footer,
     .product-card .product-info h3 { font-size: 0.92rem; }
     .product-card .product-info p { font-size: 0.8rem; }
     .product-card .product-info .price { font-size: 1rem; }
-    .product-card .product-info .btn { padding: 9px 4px; font-size: 0.82rem; }
 
     .form-container { padding: 14px 12px 40px; }
     .form-container form,
