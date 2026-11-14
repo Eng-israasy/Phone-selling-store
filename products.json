@@ -7,7 +7,6 @@
     "description": "هاتف Samsung Galaxy A13، شاشة كبيرة وكاميرا متعددة.",
     "statue": "مستعمل بحالة جيدة",
     "image": "img/a13.jpeg",
-    "seller": "إدارة المتجر",
     "phonenumber": "9050000000"
   },
   {
@@ -17,7 +16,6 @@
     "description": "هاتف Samsung Galaxy A16، تصميم أنيق وأداء جيد.",
     "statue": "جديد",
     "image": "img/a16.jpeg",
-    "seller": "إدارة المتجر",
     "phonenumber": "9050000000"
   },
   {
@@ -27,7 +25,6 @@
     "description": "هاتف Apple iPhone 12.",
     "statue": "مستعمل بحالة جيدة",
     "image": "img/iphone12.png",
-    "seller": "إدارة المتجر",
     "phonenumber": "9050000000"
   },
   {
@@ -37,7 +34,6 @@
     "description": "هاتف Apple iPhone 13.",
     "statue": "مستعمل بحالة ممتازة",
     "image": "img/iphone13.png",
-    "seller": "إدارة المتجر",
     "phonenumber": "9050000000"
   },
   {
@@ -47,7 +43,6 @@
     "description": "هاتف Apple iPhone 14.",
     "statue": "مستعمل بحالة ممتازة",
     "image": "img/iphone 14.png",
-    "seller": "إدارة المتجر",
     "phonenumber": "9050000000"
   },
   {
@@ -57,7 +52,6 @@
     "description": "هاتف Apple iPhone 15.",
     "statue": "جديد",
     "image": "img/iphone15.png",
-    "seller": "إدارة المتجر",
     "phonenumber": "9050000000"
   },
   {
@@ -67,7 +61,7 @@
     "description": "هاتف Realme بتصميم عصري.",
     "statue": "مستعمل بحالة جيدة",
     "image": "img/realme.png",
-    "seller": "إدارة المتجر",
+
     "phonenumber": "9050000000"
   },
   {
@@ -77,7 +71,6 @@
     "description": "هاتف Samsung من الفئة الاقتصادية.",
     "statue": "مستعمل",
     "image": "img/11.png",
-    "seller": "إدارة المتجر",
     "phonenumber": "9050000000"
   }
 ]
