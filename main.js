@@ -121,10 +121,7 @@ const container = productContainer || productsList;
         status.textContent = `حالة الجهاز: ${product.statue || ''}`;
         productDiv.appendChild(status);
 
-        // اسم البائع
-        const seller = document.createElement('p');
-        seller.textContent = `البائع: ${product.seller || ''}`;
-        productDiv.appendChild(seller);
+       
 
         // رابط التفاصيل
         const detailsLink = document.createElement('a');
