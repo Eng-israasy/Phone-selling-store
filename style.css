@@ -105,6 +105,28 @@ button:active { transform: scale(0.98); }
     color: var(--accent-light);
 }
 
+/* اللوغو بجانب الروابط */
+.nav-bar .logo,
+.nav-bar .nav-logo,
+.nav-bar .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-inline-end: 28px;
+    padding: 0;
+    color: #fff;
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+}
+.nav-bar .logo:hover,
+.nav-bar .nav-logo:hover,
+.nav-bar .brand:hover { background: transparent; color: #fff; }
+.nav-bar .logo img,
+.nav-bar .nav-logo img,
+.nav-bar .brand img { display: block; height: 42px; width: auto; }
+
 .nav-bar .toggle { display: none; }
 
 /* ---------- الشاشة الرئيسية (Hero) ---------- */
@@ -273,26 +295,46 @@ button:active { transform: scale(0.98); }
     font-weight: 700;
     color: var(--accent-dark);
 }
-.product-card .product-info .btn {
+/* أزرار البطاقة (المزيد / شراء): نفس الحجم والشكل */
+.product-card .product-info .btn,
+.product-card .product-info button,
+.product .btn,
+.product button {
     display: block;
     width: 100%;
-    margin-top: 12px;
-    padding: 11px;
-    border-radius: var(--radius-sm);
-    background: var(--navy);
-    color: #fff;
+    height: 42px;
+    margin: 10px 0 0;
+    padding: 0 12px;
+    line-height: 38px;
+    font-size: 0.95rem;
     font-weight: 600;
     text-align: center;
     text-decoration: none;
-    transition: background var(--transition);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background var(--transition), color var(--transition), border-color var(--transition);
+    /* الزر الأول (المزيد): إطار */
+    background: transparent;
+    color: var(--navy);
+    border: 2px solid var(--navy);
 }
-.product-card .product-info .btn:hover { background: var(--accent); }
+.product-card .product-info .btn:hover,
+.product-card .product-info button:hover,
+.product .btn:hover,
+.product button:hover { background: var(--navy); color: #fff; }
 
-/* إخفاء أزرار (المزيد) و(شراء) من بطاقات المنتجات */
-.product-card .btn,
-.product-card button,
-.product .btn,
-.product button { display: none !important; }
+/* الزر الثاني (شراء): ممتلئ */
+.product-card .product-info :is(.btn, button) ~ :is(.btn, button),
+.product :is(.btn, button) ~ :is(.btn, button) {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+}
+.product-card .product-info :is(.btn, button) ~ :is(.btn, button):hover,
+.product :is(.btn, button) ~ :is(.btn, button):hover {
+    background: var(--accent-dark);
+    border-color: var(--accent-dark);
+}
 
 /* ---------- النماذج (تسجيل / إضافة منتج) ---------- */
 .form-container {
@@ -553,16 +595,26 @@ footer,
 
     /* قائمة الموبايل: زر + قائمة منسدلة فوق المحتوى */
     .nav-bar {
+        direction: ltr;                 /* يثبّت اللوغو يساراً والقائمة يميناً */
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
-        padding: 7px 12px;
+        padding: 7px 14px;
     }
+    .nav-bar .logo,
+    .nav-bar .nav-logo,
+    .nav-bar .brand { order: 1; margin: 0; font-size: 1.1rem; }
+    .nav-bar .logo img,
+    .nav-bar .nav-logo img,
+    .nav-bar .brand img { height: 34px; }
     .nav-bar .toggle {
+        order: 2;
+        margin-left: auto;              /* الزر في أقصى اليمين */
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 100%;
+        width: auto;
+        min-width: 46px;
         height: 40px;
         padding: 0 14px;
         background: rgba(255, 255, 255, 0.08);
@@ -598,7 +650,7 @@ footer,
         display: block;
         width: 100%;
         padding: 11px 10px;
-        text-align: start;
+        text-align: center;
         font-size: 0.95rem;
         border-radius: 0;
         border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -660,6 +712,8 @@ footer,
     .product-card img,
     .product img { height: 140px; padding: 8px; }
     .product-card .product-info { padding: 10px; }
+    .product-card .product-info .btn,
+    .product-card .product-info button { height: 36px; line-height: 32px; font-size: 0.82rem; margin-top: 8px; border-radius: 8px; }
     .product-card .product-info h3 { font-size: 0.92rem; }
     .product-card .product-info p { font-size: 0.8rem; }
     .product-card .product-info .price { font-size: 1rem; }
