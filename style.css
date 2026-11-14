@@ -794,19 +794,35 @@ footer,
     #productsList,
     #product-list,
     .product-list,
-    .productsList { grid-template-columns: 1fr; gap: 16px; max-width: 420px; }   /* كرت واحد في الصف */
+    .productsList { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; max-width: none; }   /* كرتان في الصف */
     .product-card,
-    .product { border-radius: 14px; }
+    .product { border-radius: 12px; }
     .product-card img,
-    .product img { height: 200px; padding: 12px; }
+    .product img { height: 140px; padding: 8px; }
     .product-card .product-info { padding: 10px; }
-    .product { padding: 0 10px 12px; column-gap: 8px; }
+    .product { padding: 0 10px 12px; column-gap: 6px; }
     .product > img { width: calc(100% + 20px); margin: 0 -10px; }
-    .product > h3 { margin: 12px 0 4px; font-size: 1.1rem; }
-    .product > p { margin: 4px 0; font-size: 0.92rem; }
-    .product > p:nth-of-type(1) { font-size: 1.05rem; }
+    .product > h3 { margin: 10px 0 4px; font-size: 0.95rem; }
+    .product > p { margin: 3px 0; font-size: 0.78rem; }
+    .product > p:nth-of-type(1) { font-size: 0.92rem; }
+    .product > p:nth-of-type(3) {          /* الحالة: سطران ثابتان حتى لا تُقصّ */
+        height: 3.2em;
+        white-space: normal;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+    /* الزران جنب بعض */
     .product > a.details-link,
-    .product > button { height: 44px; margin-top: 12px; font-size: 0.95rem; border-radius: 10px; }
+    .product > button {
+        height: 36px;
+        margin-top: 8px;
+        padding: 0 2px;
+        font-size: 0.78rem;
+        border-radius: 8px;
+    }
+    .product > a.details-link { grid-column: 1; grid-row: 8; }
+    .product > button { grid-column: 2; grid-row: 8; }
     .product-card .product-info h3 { font-size: 0.92rem; }
     .product-card .product-info p { font-size: 0.8rem; }
     .product-card .product-info .price { font-size: 1rem; }
@@ -825,9 +841,9 @@ footer,
     #productsList,
     #product-list,
     .product-list,
-    .productsList { grid-template-columns: 1fr; }
+    .productsList { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
     .product > a.details-link,
-    .product > button { font-size: 0.85rem; }
+    .product > button { font-size: 0.8rem; }
 }
 
 /* احترام تفضيل تقليل الحركة */
