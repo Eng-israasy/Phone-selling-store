@@ -306,59 +306,61 @@ button:active { transform: scale(0.98); }
     font-weight: 700;
     color: var(--accent-dark);
 }
-/* ---------- بطاقات متساوية الحجم ---------- */
+/* ---------- بطاقات المنتجات: نفس الحجم + الأزرار في الأسفل ---------- */
 .product-list,
-.productsList { align-items: stretch; }
+.productsList {
+    grid-auto-rows: 1fr;          /* كل الصفوف والبطاقات بنفس الارتفاع (ارتفاع أطول بطاقة) */
+    align-items: stretch;
+}
 
 .product-card,
 .product {
-    display: flex;
-    flex-direction: column;
-    height: 480px;              /* ارتفاع ثابت لكل البطاقات */
-    overflow: hidden;
+    position: relative;
+    display: block;
+    height: 100%;
+    min-height: 0;
+    padding-bottom: 76px;          /* مساحة محجوزة للأزرار */
+    overflow: visible;
 }
 .product-card img,
 .product img { flex-shrink: 0; }
-.product-card .product-info {
-    flex: 1;
-    display: grid;
-    grid-template-columns: 1fr 1fr;      /* المزيد + شراء جنب بعض */
-    grid-auto-rows: min-content;
-    align-content: space-between;   /* الأزرار دائماً في أسفل البطاقة */
-    min-height: 0;
-    overflow: hidden;
-    gap: 8px;
-}
-.product-card .product-info > *:not(.btn):not(button):not(a) { grid-column: 1 / -1; }
-.product-card .product-info h3 {
-    height: 2.6em;                        /* سطران ثابتان لتتساوى البطاقات */
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-.product-card .product-info p {
-    height: 3.4em;                        /* سطران ثابتان */
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
 
-/* أزرار (المزيد) و(شراء): نفس الشكل تماماً */
-.product-card .product-info a,
-.product-card .product-info .btn,
-.product-card .product-info button,
+.product-card h3,
+.product h3 {
+    margin: 14px 14px 8px;
+    font-size: 1.2rem;
+    color: var(--navy);
+}
+.product-card p,
+.product p {
+    margin: 5px 14px;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: var(--muted);
+}
+.product-card .price,
+.product .price { color: var(--accent-dark); font-weight: 700; }
+
+/* أزرار (المزيد) و(شراء): نفس الشكل، جنب بعض، ثابتة أسفل البطاقة */
+.product-card a,
+.product-card .btn,
+.product-card button,
+.product a,
 .product .btn,
 .product button {
-    display: block;
-    width: 100%;
-    height: 42px;
-    margin: 6px 0 0;
+    position: absolute;
+    bottom: 16px;
+    inset-inline-start: 14px;
+    width: calc(50% - 20px);
+    height: 44px;
+    margin: 0;
     padding: 0 8px;
-    line-height: 42px;
-    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.98rem;
     font-weight: 600;
+    line-height: 1;
     text-align: center;
     text-decoration: none;
     color: #fff;
@@ -368,11 +370,18 @@ button:active { transform: scale(0.98); }
     cursor: pointer;
     transition: background var(--transition);
 }
-.product-card .product-info a:hover,
-.product-card .product-info .btn:hover,
-.product-card .product-info button:hover,
+/* العنصر الثاني (شراء) على الجهة الأخرى */
+.product-card :is(a, .btn, button) ~ :is(a, .btn, button),
+.product :is(a, .btn, button) ~ :is(a, .btn, button) {
+    inset-inline-start: auto;
+    inset-inline-end: 14px;
+}
+.product-card a:hover,
+.product-card .btn:hover,
+.product-card button:hover,
+.product a:hover,
 .product .btn:hover,
-.product button:hover { background: var(--accent-dark); }
+.product button:hover { background: var(--accent-dark); color: #fff; }
 
 /* ---------- النماذج (تسجيل / إضافة منتج) ---------- */
 .form-container {
@@ -713,8 +722,6 @@ footer,
     .productsList { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
     .product-card img,
     .product img { height: 175px; padding: 12px; }
-    .product-card,
-    .product { height: 430px; }
     .product-card .product-info { padding: 13px; }
     .product-card .product-info h3 { font-size: 1rem; }
     .product-card .product-info .price { font-size: 1.1rem; }
@@ -752,13 +759,21 @@ footer,
     .product { border-radius: 12px; }
     .product-card img,
     .product img { height: 140px; padding: 8px; }
-    .product-card,
-    .product { height: 365px; }
-    .product-card .product-info p { height: 1.7em; -webkit-line-clamp: 1; }
     .product-card .product-info { padding: 10px; }
-    .product-card .product-info a,
-    .product-card .product-info .btn,
-    .product-card .product-info button { height: 36px; line-height: 36px; font-size: 0.82rem; margin: 4px 0 0; padding: 0 4px; border-radius: 8px; }
+    .product-card,
+    .product { padding-bottom: 60px; }
+    .product-card h3,
+    .product h3 { margin: 10px 10px 6px; font-size: 1rem; }
+    .product-card p,
+    .product p { margin: 4px 10px; font-size: 0.8rem; }
+    .product-card a,
+    .product-card .btn,
+    .product-card button,
+    .product a,
+    .product .btn,
+    .product button { height: 36px; bottom: 12px; inset-inline-start: 8px; width: calc(50% - 12px); font-size: 0.82rem; border-radius: 8px; }
+    .product-card :is(a, .btn, button) ~ :is(a, .btn, button),
+    .product :is(a, .btn, button) ~ :is(a, .btn, button) { inset-inline-start: auto; inset-inline-end: 8px; }
     .product-card .product-info h3 { font-size: 0.92rem; }
     .product-card .product-info p { font-size: 0.8rem; }
     .product-card .product-info .price { font-size: 1rem; }
