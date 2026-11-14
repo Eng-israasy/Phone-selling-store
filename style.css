@@ -121,7 +121,7 @@ button:active { transform: scale(0.98); }
     background-image:
         linear-gradient(135deg, rgba(15, 42, 61, 0.80) 0%, rgba(15, 42, 61, 0.45) 60%, rgba(26, 166, 201, 0.25) 100%),
         url('./a16.png');
-    background-size: cover;               /* تغطي كامل المساحة بدون تمدد */
+    /* background-size: ;               /* تغطي كامل المساحة بدون تمدد */ */
     background-position: center center;
     background-repeat: no-repeat;
 }
