@@ -1,213 +1,110 @@
-
-document.addEventListener('DOMContentLoaded', async function() {
-
-    // قراءة معرف المنتج من الرابط
-    const productId = new URLSearchParams(window.location.search).get('id');
-
-    if (!productId) {
-        document.body.innerHTML = '<h1>المنتج غير موجود</h1>';
-        return;
-    }
-
-    try {
-
-        // تحميل المنتجات من ملف JSON
-        const response = await fetch('./products.json');
-
-        if (!response.ok) {
-            throw new Error('تعذر تحميل المنتجات');
-        }
-
-        const products = await response.json();
-
-        // البحث عن المنتج المطلوب
-        const product = products.find(p => String(p.id) === productId);
-
-        if (!product) {
-            document.body.innerHTML = '<h1>المنتج غير موجود</h1>';
-            return;
-        }
-
-        // عرض تفاصيل المنتج
-        document.getElementById('productName').textContent = product.name;
-
-        document.getElementById('productPrice').textContent =
-            `السعر: ${product.price} $`;
-
-        document.getElementById('productDescription').textContent =
-            `الوصف: ${product.description || product.DescribtionProduct || ''}`;
-
-        document.getElementById('productStatue').textContent =
-            `حالة الجهاز: ${product.statue || ''}`;
-
-        const productImage = document.getElementById('productImage');
-        productImage.src = product.image;
-        productImage.alt = product.name;
-
-        // إعداد WhatsApp
-        const whatsappLink = document.getElementById('whatsappLink');
-
-        if (product.phonenumber) {
-
-            const message =
-                `مرحباً، أريد الاستفسار عن ${product.name} بسعر ${product.price}$`;
-
-            whatsappLink.href =
-                `https://wa.me/${product.phonenumber}?text=${encodeURIComponent(message)}`;
-
-        } else {
-            whatsappLink.removeAttribute('href');
-        }
-
-        // البريد الإلكتروني غير محدد حالياً
-        const emailLink = document.getElementById('emailLink');
-        emailLink.href = 'mailto:';
-
-        // عرض التعليقات المحفوظة محلياً
-        displayReviews(productId);
-
-        // إضافة تعليق
-        document.getElementById('commentForm')
-            ?.addEventListener('submit', function(e) {
-
-                e.preventDefault();
-
-                const commentText =
-                    document.getElementById('comment').value.trim();
-
-                if (!commentText) {
-                    alert('يرجى إدخال تعليق قبل الإرسال.');
-                    return;
-                }
-
-                const currentUser =
-                    JSON.parse(localStorage.getItem('currentUser')) || null;
-
-                const newComment = {
-                    id: Date.now(),
-                    productId: productId,
-                    text: commentText,
-                    user: currentUser ? currentUser.text : 'زائر'
-                };
-
-                const comments =
-                    JSON.parse(localStorage.getItem('comments')) || [];
-
-                comments.push(newComment);
-
-                localStorage.setItem('comments', JSON.stringify(comments));
-
-                document.getElementById('commentForm').reset();
-
-                displayReviews(productId);
-
-                alert('تمت إضافة تعليقك.');
-            });
-
-        // نموذج الاتصال
-        document.getElementById('contactForm')
-            ?.addEventListener('submit', function(e) {
-
-                e.preventDefault();
-
-                const name = document.getElementById('name').value.trim();
-                const email = document.getElementById('email').value.trim();
-                const message = document.getElementById('message').value.trim();
-
-                if (!name || !email || !message) {
-                    alert('يرجى ملء جميع الحقول.');
-                    return;
-                }
-
-                const whatsappMessage =
-                    `الاسم: ${name}\nالبريد: ${email}\nالرسالة: ${message}`;
-
-                if (product.phonenumber && product.phonenumber !== '9050000000') {
-
-                    const url =
-                        `https://wa.me/${product.phonenumber}?text=${encodeURIComponent(whatsappMessage)}`;
-
-                    window.open(url, '_blank');
-
-                    document.getElementById('contactForm').reset();
-
-                } else {
-                    alert('يرجى تحديد رقم WhatsApp الحقيقي للمتجر أولاً.');
-                }
-            });
-
-    } catch (error) {
-
-        console.error('خطأ:', error);
-
-        document.body.innerHTML =
-            '<h1>حدث خطأ أثناء تحميل تفاصيل الجهاز.</h1>';
-    }
-
-    // =================================
-    // عرض التعليقات
-    // =================================
-
-    function displayReviews(productId) {
-
-        const comments =
-            JSON.parse(localStorage.getItem('comments')) || [];
-
-        const productReviews =
-            comments.filter(c => String(c.productId) === String(productId));
-
-        const reviewsList = document.getElementById('reviewsList');
-
-        reviewsList.innerHTML = '';
-
-        if (productReviews.length === 0) {
-            reviewsList.textContent = 'لا توجد تعليقات حتى الآن.';
-            return;
-        }
-
-        productReviews.forEach(comment => {
-
-            const reviewDiv = document.createElement('div');
-            reviewDiv.classList.add('review');
-
-            const user = document.createElement('h3');
-            user.textContent = comment.user;
-
-            const text = document.createElement('p');
-            text.textContent = comment.text;
-
-            reviewDiv.appendChild(user);
-            reviewDiv.appendChild(text);
-
-            // زر حذف التعليق
-            const deleteButton = document.createElement('button');
-
-            deleteButton.textContent = 'حذف';
-
-            deleteButton.addEventListener('click', function() {
-
-                if (confirm('هل أنت متأكد من حذف هذا التعليق؟')) {
-
-                    let comments =
-                        JSON.parse(localStorage.getItem('comments')) || [];
-
-                    comments = comments.filter(
-                        c => c.id !== comment.id
-                    );
-
-                    localStorage.setItem(
-                        'comments',
-                        JSON.stringify(comments)
-                    );
-
-                    displayReviews(productId);
-                }
-            });
-
-            reviewDiv.appendChild(deleteButton);
-
-            reviewsList.appendChild(reviewDiv);
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفاصيل المنتج</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- شريط التنقل (اللوغو يظهر تلقائياً من styles.css) -->
+    <header class="nav-bar">
+        <span class="toggle" id="navToggle">☰</span>
+        <div class="menu" id="navMenu">
+            <a href="index.html">الرئيسية</a>
+            <a href="login.html">تسجيل الدخول</a>
+        </div>
+    </header>
+
+    <main class="pd-wrap">
+
+        <a href="index.html" class="pd-back">→ العودة إلى الأجهزة</a>
+
+        <!-- بطاقة المنتج -->
+        <section class="pd-hero">
+            <div class="pd-image">
+                <img id="productImage" alt="صورة المنتج">
+            </div>
+
+            <div class="pd-info">
+                <h1 id="productName">جارٍ التحميل...</h1>
+                <p id="productPrice" class="pd-price"></p>
+                <p id="productStatue" class="pd-chip"></p>
+                <p id="productDescription" class="pd-desc"></p>
+                <p class="pd-seller">البائع: <span id="productSeller">—</span></p>
+
+                <!-- روابط التواصل -->
+                <div id="contactLinks" class="pd-actions">
+                    <a id="whatsappLink" class="pd-btn" href="#" target="_blank" rel="noopener">تواصل عبر WhatsApp</a>
+                    <a id="emailLink" class="pd-btn pd-btn-alt" href="#">أرسل بريداً إلكترونياً</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- التقييمات -->
+        <section class="pd-card">
+            <h2>تقييم البائعين</h2>
+            <div id="reviewsList"></div>
+        </section>
+
+        <!-- التعليق + الاتصال -->
+        <div class="pd-two">
+            <section class="pd-card">
+                <h2>إضافة تعليق</h2>
+                <form id="commentForm">
+                    <div class="form-group">
+                        <label for="comment">التعليق:</label>
+                        <textarea id="comment" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit">إرسال التعليق</button>
+                    </div>
+                </form>
+            </section>
+
+            <section class="pd-card">
+                <h2>نموذج الاتصال</h2>
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="name">الاسم:</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">البريد الإلكتروني:</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">الرسالة:</label>
+                        <textarea id="message" rows="4" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit">إرسال الرسالة</button>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </main>
+
+    <script src="product-details.js"></script>
+    <script>
+        // قائمة الهاتف
+        document.getElementById('navToggle').addEventListener('click', function () {
+            document.getElementById('navMenu').classList.toggle('show');
         });
-    }
 
-});
+        // اسم البائع + عنوان التبويب (بدون تعديل product-details.js)
+        (async function () {
+            try {
+                const id = new URLSearchParams(location.search).get('id');
+                const res = await fetch('./products.json');
+                const list = await res.json();
+                const p = list.find(x => String(x.id) === id);
+                if (!p) return;
+                document.getElementById('productSeller').textContent = p.seller || '—';
+                document.title = p.name + ' - تفاصيل المنتج';
+            } catch (e) { /* تجاهل */ }
+        })();
+    </script>
+</body>
+</html>
