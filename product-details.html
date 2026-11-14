@@ -1,158 +1,110 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تفاصيل المنتج</title>
-    <style>
-        /* نفس الـ CSS الموجود لديك */
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            background: #f4f4f4;
-        }
-        .container {
-            width: 50%;
-            margin: auto;
-            overflow: hidden;
-            padding: 20px;
-            background: #a8a6a6;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        img {
-            max-width: 80%;
-            height: auto;
-            display: block;
-            margin: 0 auto;
-            border-radius: 8px;
-        }
-        h1, h3 {
-            color: #333;
-        }
-        .details-link {
-            display: inline-block;
-            margin-top: 10px;
-            text-decoration: none;
-            color: #007bff;
-        }
-        .details-link:hover {
-            text-decoration: underline;
-        }
-        form {
-            margin-top: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .form-group input, .form-group textarea {
-            width: 50%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        .form-group button {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
-            color: #fff;
-            background-color: #007bff;
-            cursor: pointer;
-        }
-        .form-group button:hover {
-            background-color: #0056b3;
-        }
-        .review {
-           display: inline-block;
-            margin-bottom: 15px;
-            padding: 10px;
-            background:#86a8cd;
-            border-radius: 4px;
-            box-shadow: 0 0 5px rgba(0,0,0,0.1);
-        }
-        .review h3 {
-            margin: 0;
-            font-size: 1.2em;
-        }
-        .review p {
-            margin: 10px 0;
-        }
-        .review button {
-            background-color: #86a8cd;
-        }
-        .review button:hover {
-            background-color: #c82333;
-        }
-.b1{
-    background-color: #86a8cd;
-    /* display: flex; */
-    width: 200px;
-    margin: 30px;
-    padding: 20px;
-}
-a{
-    text-decoration: none;
-    color: #161616;
-
-}
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1 id="productName">devicename</h1>
-        <img id="productImage" src="" alt="صورة المنتج">
-        <p id="productPrice">price </p>
-        <p id="productDescription">desrcaption</p>
-        <p id="productStatue"> devicestus </p>
-        
-        <!-- روابط التواصل (يمكن تعديلها حسب الحاجة) -->
-        <div id="contactLinks">
-           <button class="b1"><a id="whatsappLink" href="#" target="_blank">تواصل عبر WhatsApp</a></button>
-           <button class="b1"> <a id="emailLink" href="#">أرسل بريدًا إلكترونيًا</a></button>
+
+    <!-- شريط التنقل (اللوغو يظهر تلقائياً من styles.css) -->
+    <header class="nav-bar">
+        <span class="toggle" id="navToggle">☰</span>
+        <div class="menu" id="navMenu">
+            <a href="index.html">الرئيسية</a>
+            <a href="login.html">تسجيل الدخول</a>
         </div>
-        <h3>تقييم البائعين </h3>
+    </header>
 
-        <div id="reviewsList">
+    <main class="pd-wrap">
+
+        <a href="index.html" class="pd-back">→ العودة إلى الأجهزة</a>
+
+        <!-- بطاقة المنتج -->
+        <section class="pd-hero">
+            <div class="pd-image">
+                <img id="productImage" alt="صورة المنتج">
+            </div>
+
+            <div class="pd-info">
+                <h1 id="productName">جارٍ التحميل...</h1>
+                <p id="productPrice" class="pd-price"></p>
+                <p id="productStatue" class="pd-chip"></p>
+                <p id="productDescription" class="pd-desc"></p>
+                <p class="pd-seller">البائع: <span id="productSeller">—</span></p>
+
+                <!-- روابط التواصل -->
+                <div id="contactLinks" class="pd-actions">
+                    <a id="whatsappLink" class="pd-btn" href="#" target="_blank" rel="noopener">تواصل عبر WhatsApp</a>
+                    <a id="emailLink" class="pd-btn pd-btn-alt" href="#">أرسل بريداً إلكترونياً</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- التقييمات -->
+        <section class="pd-card">
+            <h2>تقييم البائعين</h2>
+            <div id="reviewsList"></div>
+        </section>
+
+        <!-- التعليق + الاتصال -->
+        <div class="pd-two">
+            <section class="pd-card">
+                <h2>إضافة تعليق</h2>
+                <form id="commentForm">
+                    <div class="form-group">
+                        <label for="comment">التعليق:</label>
+                        <textarea id="comment" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit">إرسال التعليق</button>
+                    </div>
+                </form>
+            </section>
+
+            <section class="pd-card">
+                <h2>نموذج الاتصال</h2>
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="name">الاسم:</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">البريد الإلكتروني:</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">الرسالة:</label>
+                        <textarea id="message" rows="4" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit">إرسال الرسالة</button>
+                    </div>
+                </form>
+            </section>
         </div>
-        
-
-        <h3>إضافة تعليق</h3>
-        <form id="commentForm">
-            <div class="form-group">
-                <label for="comment">التعليق:</label>
-                <textarea id="comment" rows="4"></textarea>
-            </div>
-            <div class="form-group">
-                <button type="submit">إرسال التعليق</button>
-            </div>
-        </form>
-
-        <h3>نموذج الاتصال</h3>
-        <form id="contactForm">
-            <div class="form-group">
-                <label for="name">الاسم:</label>
-                <input type="text" id="name" required>
-            </div>
-            <div class="form-group">
-                <label for="email">البريد الإلكتروني:</label>
-                <input type="email" id="email" required>
-            </div>
-            <div class="form-group">
-                <label for="message">الرسالة:</label>
-                <textarea id="message" rows="4" required></textarea>
-            </div>
-            <div class="form-group">
-                <button type="submit">إرسال الرسالة</button>
-            </div>
-        </form>
-    </div>
+    </main>
 
     <script src="product-details.js"></script>
+    <script>
+        // قائمة الهاتف
+        document.getElementById('navToggle').addEventListener('click', function () {
+            document.getElementById('navMenu').classList.toggle('show');
+        });
+
+        // اسم البائع + عنوان التبويب (بدون تعديل product-details.js)
+        (async function () {
+            try {
+                const id = new URLSearchParams(location.search).get('id');
+                const res = await fetch('./products.json');
+                const list = await res.json();
+                const p = list.find(x => String(x.id) === id);
+                if (!p) return;
+                document.getElementById('productSeller').textContent = p.seller || '—';
+                document.title = p.name + ' - تفاصيل المنتج';
+            } catch (e) { /* تجاهل */ }
+        })();
+    </script>
 </body>
 </html>
