@@ -76,8 +76,7 @@ function displayProducts(products = allProducts) {
     const productContainer = document.getElementById('product-list');
 
     // استخدام الحاوية الموجودة في الصفحة
-    const container = productsList || productContainer;
-
+const container = productContainer || productsList;
     if (!container) return;
 
     container.innerHTML = '';
