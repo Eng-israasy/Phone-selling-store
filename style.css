@@ -864,7 +864,7 @@ img {
     align-items: center;
     background:
         linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)),
-        url('img/a16.png') center / cover no-repeat;
+        url('a16.png') center / cover no-repeat;
 }
 
 .content .home {
