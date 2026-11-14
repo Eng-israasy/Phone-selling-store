@@ -1,194 +1,234 @@
-// // // // main.js
-// // register.js
 
+// ========================================
+// main.js - Mobile Store
+// قراءة المنتجات من products.json
+// ========================================
+
+let allProducts = [];
+
+// ========================================
+// تسجيل المستخدم
+// ========================================
 
 document.getElementById('registerForm')?.addEventListener('submit', function(e) {
     e.preventDefault();
+
     const text = document.getElementById('text').value;
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
 
     if (password !== confirmPassword) {
-        document.getElementById('errorMessage').textContent = 'كلمة المرور وتأكيد كلمة المرور غير متطابقتين.';
-        document.getElementById('errorMessage').style.display = 'block';
+        const error = document.getElementById('errorMessage');
+        error.textContent = 'كلمة المرور وتأكيد كلمة المرور غير متطابقتين.';
+        error.style.display = 'block';
         return;
     }
 
-    const newUser = {
-        text: text,
-        email: email,
-        password: password
-    };
-
-    // جلب المستخدمين المخزنين أو تعيين مصفوفة فارغة إذا لم تكن موجودة
     const users = JSON.parse(localStorage.getItem('users')) || [];
-    users.push(newUser);
+
+    if (users.some(user => user.email === email)) {
+        const error = document.getElementById('errorMessage');
+        error.textContent = 'هذا البريد الإلكتروني مسجل مسبقاً.';
+        error.style.display = 'block';
+        return;
+    }
+
+    users.push({ text, email, password });
     localStorage.setItem('users', JSON.stringify(users));
 
-    // إعادة توجيه المستخدم إلى صفحة تسجيل الدخول
     window.location.href = 'login.html';
 });
 
+// ========================================
 // تسجيل الدخول
+// ========================================
+
 document.getElementById('loginForm')?.addEventListener('submit', function(e) {
     e.preventDefault();
-    
+
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
     const users = JSON.parse(localStorage.getItem('users')) || [];
-    const user = users.find(u => u.email === email && u.password === password);
+
+    const user = users.find(
+        u => u.email === email && u.password === password
+    );
 
     if (user) {
         localStorage.setItem('currentUser', JSON.stringify(user));
         window.location.href = 'index.html';
     } else {
-        document.getElementById('errorMessage').textContent = 'البريد الإلكتروني أو كلمة المرور غير صحيحة.';
-        document.getElementById('errorMessage').style.display = 'block';
+        const error = document.getElementById('errorMessage');
+        error.textContent = 'البريد الإلكتروني أو كلمة المرور غير صحيحة.';
+        error.style.display = 'block';
     }
 });
 
-// وظيفة البحث
+// ========================================
+// عرض المنتجات
+// ========================================
+
+function displayProducts(products = allProducts) {
+
+    const productsList = document.getElementById('productsList');
+    const productContainer = document.getElementById('product-list');
+
+    // استخدام الحاوية الموجودة في الصفحة
+    const container = productsList || productContainer;
+
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    if (products.length === 0) {
+        container.innerHTML = '<p>لا توجد أجهزة متاحة حالياً.</p>';
+        return;
+    }
+
+    products.forEach(product => {
+
+        const productDiv = document.createElement('div');
+        productDiv.classList.add('product');
+
+        // صورة الجهاز
+        const productImage = document.createElement('img');
+        productImage.src = product.image;
+        productImage.alt = product.name;
+        productImage.loading = 'lazy';
+
+        productDiv.appendChild(productImage);
+
+        // اسم الجهاز
+        const productName = document.createElement('h3');
+        productName.textContent = product.name;
+        productDiv.appendChild(productName);
+
+        // السعر
+        const productPrice = document.createElement('p');
+        productPrice.textContent = `السعر: ${product.price} $`;
+        productDiv.appendChild(productPrice);
+
+        // الوصف
+        const description = document.createElement('p');
+        description.textContent =
+            `الوصف: ${product.description || product.DescribtionProduct || ''}`;
+
+        productDiv.appendChild(description);
+
+        // حالة الجهاز
+        const status = document.createElement('p');
+        status.textContent = `حالة الجهاز: ${product.statue || ''}`;
+        productDiv.appendChild(status);
+
+        // اسم البائع
+        const seller = document.createElement('p');
+        seller.textContent = `البائع: ${product.seller || ''}`;
+        productDiv.appendChild(seller);
+
+        // رابط التفاصيل
+        const detailsLink = document.createElement('a');
+
+        detailsLink.href = `product-details.html?id=${product.id}`;
+        detailsLink.textContent = 'المزيد';
+        detailsLink.classList.add('details-link');
+
+        productDiv.appendChild(detailsLink);
+
+        // زر الشراء
+        const buyButton = document.createElement('button');
+        buyButton.textContent = 'شراء الآن';
+
+        buyButton.addEventListener('click', function() {
+
+            const whatsappNumber = product.phonenumber;
+
+            if (!whatsappNumber || whatsappNumber === '9050000000') {
+                alert('يرجى تحديث رقم WhatsApp الخاص بالمتجر.');
+                return;
+            }
+
+            const message =
+                `أريد شراء المنتج ${product.name} بسعر ${product.price}$.`;
+
+            const url =
+                `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+
+            window.open(url, '_blank');
+        });
+
+        productDiv.appendChild(buyButton);
+
+        container.appendChild(productDiv);
+    });
+}
+
+// ========================================
+// البحث عن المنتجات
+// ========================================
+
 window.performSearch = function(event) {
-    event.preventDefault(); // منع إعادة تحميل الصفحة
-    
-    const searchQuery = document.getElementById('searchInput').value.toLowerCase();
-    const products = JSON.parse(localStorage.getItem('products')) || [];
-    
-    const filteredProducts = products.filter(product => 
+
+    event.preventDefault();
+
+    const searchInput = document.getElementById('searchInput');
+
+    const searchQuery = searchInput.value.trim().toLowerCase();
+
+    const filteredProducts = allProducts.filter(product =>
         product.name.toLowerCase().includes(searchQuery)
     );
 
     displayProducts(filteredProducts);
 };
 
-// عرض المنتجات
-function displayProducts(filteredProducts = []) {
-    const products = filteredProducts.length > 0 ? filteredProducts : JSON.parse(localStorage.getItem('products')) || [];
-    const productsList = document.getElementById('productsList');
-    productsList.innerHTML = '';
+// ========================================
+// تحميل المنتجات من ملف JSON
+// ========================================
 
-    // if (products.length === 0) {
-    //     productsList.innerHTML = '<p>لا توجد منتجات لعرضها.</p>';
-    //     return;
-    // }
+async function loadProducts() {
 
-    products.forEach(product => {
-        const productDiv = document.createElement('div');
-        productDiv.classList.add('product');
+    try {
 
-        const productImage = document.createElement('img');
-        productImage.src = product.image;
-        productDiv.appendChild(productImage);
+        const response = await fetch('./products.json');
 
-        const productName = document.createElement('h3');
-        productName.textContent = product.name;
-        productDiv.appendChild(productName);
-
-        const productPrice = document.createElement('p');
-        productPrice.textContent = `السعر: ${product.price} $`;
-        productDiv.appendChild(productPrice);
-
-        const DescribtionProduct = document.createElement('p');
-        DescribtionProduct.textContent = `الوصف: ${product.DescribtionProduct}`;
-        productDiv.appendChild(DescribtionProduct);
-
-        const productSeller = document.createElement('p');
-        productSeller.textContent = `البائع: ${product.seller}`;
-        productDiv.appendChild(productSeller);
-
-        const phonestatue = document.createElement('p');
-        phonestatue.textContent = `حالة الجهاز: ${product.statue}`;
-        productDiv.appendChild(phonestatue);
-
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'حذف';
-        deleteButton.addEventListener('click', function() {
-            deleteProduct(product.id);
-        });
-        productDiv.appendChild(deleteButton);
-
-        // رابط "عرض التفاصيل"
-        const detailsLink = document.createElement('a');
-        detailsLink.href = `product-details.html?id=${product.id}`;
-        detailsLink.textContent = 'المزيد';
-        detailsLink.classList.add('details-link');
-        detailsLink.style.textDecoration = "none";
-        detailsLink.style.border = "2px solid black";
-        detailsLink.style.padding = "5px";
-        detailsLink.style.backgroundColor = "#8ddcf4";
-        detailsLink.style.color = "dimgrey";
-        productDiv.appendChild(detailsLink);
-
-        // إضافة زر "شراء الآن"
-        const buyButton = document.createElement('button');
-        buyButton.textContent = 'شراء الآن';
-        buyButton.addEventListener('click', function() {
-            const whatsappNumber = product.phonenumber;
-            const message = `أريد شراء المنتج ${product.name} بسعر ${product.price}$.`;
-            const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-            window.open(url, '_blank');
-        });
-        productDiv.appendChild(buyButton);
-
-        productsList.appendChild(productDiv);
-    });
-}
-
-// حذف منتج
-function deleteProduct(productId) {
-    const products = JSON.parse(localStorage.getItem('products')) || [];
-    const updatedProducts = products.filter(product => product.id !== productId);
-    localStorage.setItem('products', JSON.stringify(updatedProducts));
-    displayProducts(); // استدعاء displayProducts بعد حذف المنتج
-}
-
-// تحميل المنتجات عند فتح الصفحة
-document.addEventListener('DOMContentLoaded', function() {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser')) || { text: 'مستخدم مجهول' };
-
-    // إضافة منتج جديد
-    document.getElementById('productForm')?.addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        const productName = document.getElementById('productName').value;
-        const productPrice = document.getElementById('productPrice').value;
-        const DescribtionProduct = document.getElementById('DescribtionProduct').value;
-        const phonestatue = document.getElementById('phonestatue').value;
-        const productImage = document.getElementById('productImage').files[0];
-        const phonenumber = document.getElementById('phonenumber') ? document.getElementById('phonenumber').value : '';
-
-        if (!productName || !productPrice || !DescribtionProduct || !phonestatue || !productImage) {
-            console.error('يرجى ملء جميع الحقول');
-            return;
+        if (!response.ok) {
+            throw new Error('تعذر تحميل ملف المنتجات');
         }
 
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            const newProduct = {
-                id: Date.now(), // Unique ID
-                name: productName,
-                price: productPrice,
-                DescribtionProduct: DescribtionProduct,
-                statue: phonestatue,
-                image: event.target.result,
-                seller: currentUser.text,
-                phonenumber: phonenumber
-            };
+        allProducts = await response.json();
 
-            const products = JSON.parse(localStorage.getItem('products')) || [];
-            products.push(newProduct);
-            localStorage.setItem('products', JSON.stringify(products));
+        displayProducts();
 
-            document.getElementById('productForm').reset();
-            displayProducts(); // استدعاء displayProducts بعد إضافة منتج جديد
-        };
-        reader.readAsDataURL(productImage);
+    } catch (error) {
+
+        console.error('خطأ في تحميل المنتجات:', error);
+
+        const container =
+            document.getElementById('productsList') ||
+            document.getElementById('product-list');
+
+        if (container) {
+            container.innerHTML =
+                '<p>حدث خطأ أثناء تحميل الأجهزة. يرجى المحاولة لاحقاً.</p>';
+        }
+    }
+}
+
+// ========================================
+// تشغيل الصفحة
+// ========================================
+
+document.addEventListener('DOMContentLoaded', function() {
+
+    // تحميل المنتجات
+    loadProducts();
+
+    // إيقاف إضافة المنتجات من الزوار
+    document.getElementById('productForm')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('إضافة الأجهزة متاحة لإدارة المتجر فقط.');
     });
 
-    // عرض المنتجات عند تحميل الصفحة
-    displayProducts();
 });
-
-
